@@ -4,11 +4,6 @@ using UnityEngine;
 using Microsoft.MixedReality.Toolkit;
 
 
-enum State
-{
-    Idle,
-    StartPlaced
-}
 public class Placer : MonoBehaviour, IMixedRealityPointerHandler
 {
     private State state = State.Idle;

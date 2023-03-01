@@ -2,7 +2,7 @@ using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
 
-public class QuboidPlacer : MonoBehaviour, IMixedRealityGestureHandler<Vector3>
+public class QuboidPlacerTest : MonoBehaviour, IMixedRealityGestureHandler<Vector3>
 {
 
     private void OnEnable()
