@@ -1311,7 +1311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 148278199}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3134,11 +3134,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416060774}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecf5877587947d84da8fdf452bf7c443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onFinishedPlacing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: TurnOffPlacer
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   startMarker: {fileID: 1791422365}
   endMarker: {fileID: 709016618}
   startSphere: {fileID: 1565903725}
@@ -3313,7 +3328,6 @@ GameObject:
   m_Component:
   - component: {fileID: 473594765}
   - component: {fileID: 473594767}
-  - component: {fileID: 473594766}
   - component: {fileID: 473594768}
   m_Layer: 0
   m_Name: TextMeshPro
@@ -3342,14 +3356,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.0109}
   m_SizeDelta: {x: 0.032, y: 0.01}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &473594766
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 473594764}
-  m_CullTransparentMesh: 0
 --- !u!23 &473594767
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4811,7 +4817,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 800624142}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6962,6 +6968,7 @@ MonoBehaviour:
   placePyramidToggleButtonInteractable: {fileID: 221684468}
   placeCylinderToggleButtonInteractable: {fileID: 195170575}
   handMenuHandler: {fileID: 2139531615}
+  HandConstraintPalmUp: {fileID: 2139531611}
 --- !u!1 &991371564
 GameObject:
   m_ObjectHideFlags: 0
@@ -11909,7 +11916,7 @@ MonoBehaviour:
   pivotDirectionOrient: 0
   manualPivotDirection: {x: 0, y: 1, z: 0}
   manualPivotLocalPosition: {x: 0, y: 1, z: 0}
-  pivotDistance: 0.25
+  pivotDistance: 0.075
 --- !u!114 &1599882150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14212,7 +14219,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2019545536}
   - component: {fileID: 2019545539}
-  - component: {fileID: 2019545538}
   - component: {fileID: 2019545537}
   m_Layer: 0
   m_Name: TextMeshPro
@@ -14333,14 +14339,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2019545539}
   m_maskType: 0
---- !u!222 &2019545538
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019545535}
-  m_CullTransparentMesh: 0
 --- !u!23 &2019545539
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -15062,6 +15060,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: SetPausePlacers
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onHandDeactivate:
     m_PersistentCalls:
       m_Calls:
@@ -15080,6 +15090,18 @@ MonoBehaviour:
       - m_Target: {fileID: 990617368}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: SetPausePlacers
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15166,3 +15188,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Placer: {fileID: 416060774}
+  PlaceMenuHandler: {fileID: 990617370}

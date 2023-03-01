@@ -4,22 +4,27 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 enum State
 {
     Idle,
-    StartPlaced
+    StartPlaced,
+    Paused
 }
 
 public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 {
+    public UnityEvent onFinishedPlacing;
+
     protected Vector3 startPosition;
     protected GameObject previewObject;
 
     private const float SPHERE_SIZE = 0.03f;
 
     private State state = State.Idle;
-    
+    private bool isPaused = false;
+
     [SerializeField] private GameObject startMarker;
     [SerializeField] private GameObject endMarker;
     [SerializeField] private GameObject startSphere;
@@ -47,12 +52,33 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
             this.endSphere.transform.localScale = new Vector3(Placeable.SPHERE_SIZE, Placeable.SPHERE_SIZE, Placeable.SPHERE_SIZE);
             this.endSphere.GetComponent<Renderer>().material.color = new Color(0, 255, 0);
         }
+
+        this.startMarker.SetActive(true);
     }
 
     private void OnDisable()
     {
         // Instruct Input System to disregard all input events of type IMixedRealityGestureHandler
         CoreServices.InputSystem?.UnregisterHandler<IMixedRealityPointerHandler>(this);
+
+        this.startPosition = Vector3.zero;
+        Destroy(this.previewObject);
+        this.previewObject = null;
+        this.state = State.Idle;
+        this.startMarker.SetActive(false);
+        this.endMarker.SetActive(false);
+    }
+
+    public void SetPausePlacer(bool paused)
+    {
+        this.isPaused = paused;
+        this.startMarker.SetActive(!paused);
+        this.endMarker.SetActive(!paused);
+        if (paused)
+        {
+            Destroy(this.previewObject);
+        }
+        
     }
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)
@@ -72,28 +98,31 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 
     public void OnPointerClicked(MixedRealityPointerEventData eventData)
     {
-        Debug.Log(eventData.Pointer.Position);
-        Debug.Log($"State {state}");
-        if (state == State.Idle)
+        if (!this.isPaused)
         {
-            this.startPosition = eventData.Pointer.Position;
-            this.state = State.StartPlaced;         
+            if (state == State.Idle)
+            {
+                this.startPosition = eventData.Pointer.Position;
+                this.state = State.StartPlaced;
+            }
+            else if (state == State.StartPlaced && this.previewObject != null)
+            {
+                this.state = State.Idle;
+                this.previewObject.GetComponent<Renderer>().material.color = new Color(0.066f, 0.122f, 0.412f);
+                this.startMarker.SetActive(false);
+                this.endMarker.SetActive(false);
+                this.startPosition = Vector3.zero;
+                this.previewObject = null;
+                this.onFinishedPlacing.Invoke();
+            }
         }
-        else if (state == State.StartPlaced && this.previewObject != null)
-        {
-            this.state = State.Idle;
-            this.previewObject.GetComponent<Renderer>().material.color = new Color(0.066f, 0.122f, 0.412f);
-            this.startMarker.SetActive(false);
-            this.endMarker.SetActive(false);
-            this.startPosition = Vector3.zero;
-            this.previewObject = null;
-        }
+
     }
 
     void Update()
     {
         MixedRealityPose pose;
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Both, out pose))
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Both, out pose) && !this.isPaused)
         {
             if (state == State.Idle)
             {
@@ -104,8 +133,8 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
                 this.GeneratePreview(pose);
                 this.updateEndSphere(pose);
             }
-
-        } else
+        }
+        else
         {
             this.startMarker.SetActive(false);
             this.endMarker.SetActive(false);
