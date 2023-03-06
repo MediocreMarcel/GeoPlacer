@@ -17,15 +17,14 @@ public class PlaceMenuHandler : MonoBehaviour
     [SerializeField] private HandConstraintPalmUp HandConstraintPalmUp;
 
 
-    public void OnEnable()
+    void OnEnable()
     {
-        Debug.Log(HandConstraintPalmUp.Handedness);
-        if (HandConstraintPalmUp.Handedness == Handedness.Right && transform.localPosition.x > 0)
+        if ((HandConstraintPalmUp.Handedness == Handedness.Right && transform.localPosition.x > 0) 
+            || (HandConstraintPalmUp.Handedness == Handedness.Left && transform.localPosition.x < 0))
         {
-            Vector3 rightHandedPosition = transform.localPosition;
-            rightHandedPosition.x = -rightHandedPosition.x;
-            Debug.Log(rightHandedPosition);
-            transform.localPosition = rightHandedPosition;
+            Vector3 formerHandedPosition = transform.localPosition;
+            formerHandedPosition.x = -formerHandedPosition.x;
+            transform.localPosition = formerHandedPosition;
         }
     }
 

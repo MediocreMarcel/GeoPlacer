@@ -52,6 +52,12 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
             this.endSphere = this.endMarker;
             this.endSphere.transform.localScale = new Vector3(Placeable.SPHERE_SIZE, Placeable.SPHERE_SIZE, Placeable.SPHERE_SIZE);
             this.endSphere.GetComponent<Renderer>().material.color = new Color(0, 255, 0);
+            this.endMarker.SetActive(false);
+        }
+        if (this.previewOutline == null)
+        {
+            this.previewOutline = Instantiate(this.previewOutlinePrefab, Vector3.zero, Quaternion.identity).gameObject;
+            this.previewOutline.SetActive(false);
         }
 
         this.startMarker.SetActive(true);
@@ -75,12 +81,11 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         this.isPaused = paused;
         this.startMarker.SetActive(!paused);
         this.endMarker.SetActive(!paused);
-        this.previewOutline.SetActive(!paused);
+        this.previewOutline.SetActive(!paused && this.state == State.StartPlaced);
         if (paused)
         {
             Destroy(this.previewObject);
         }
-
     }
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)
@@ -144,6 +149,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         {
             this.startMarker.SetActive(false);
             this.endMarker.SetActive(false);
+            this.previewOutline.SetActive(false);
         }
     }
 
@@ -155,7 +161,6 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 
     private void DrawPreviewOutline(Vector3 position, Vector3 scale)
     {
-        Debug.Log(this.previewOutline);
         if (this.previewOutline == null)
         {
             this.previewOutline = Instantiate(this.previewOutlinePrefab, position, Quaternion.identity).gameObject;

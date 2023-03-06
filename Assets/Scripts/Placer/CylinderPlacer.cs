@@ -11,8 +11,7 @@ public class CylinderPlacer : Placeable
     {
         if (this.previewObject == null)
         {
-            this.previewObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            //this.previewObject = Instantiate(CylinderPrefab, centerPosition, Quaternion.identity).gameObject;
+            this.previewObject = Instantiate(CylinderPrefab, centerPosition, Quaternion.identity).gameObject;
         }
 
         this.SetPreviewMaterial(this.previewObject.GetComponent<Renderer>().material);
