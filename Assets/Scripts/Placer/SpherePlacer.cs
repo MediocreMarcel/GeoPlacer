@@ -1,13 +1,14 @@
+using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
 
-public class QuboidPlacer : Placeable
+public class SpherePlacer : Placeable
 {
-    public GameObject QuboidPrefab;
+    public GameObject SpherePrefab;
     public override void GeneratePreview(Vector3 centerPosition, Vector3 scale)
     {
         if (this.previewObject == null)
         {
-            this.previewObject = Instantiate(QuboidPrefab, centerPosition, Quaternion.identity).gameObject;
+            this.previewObject = Instantiate(SpherePrefab, centerPosition, Quaternion.identity).gameObject;
         }
 
         this.SetPreviewMaterial(this.previewObject.GetComponent<Renderer>().material);

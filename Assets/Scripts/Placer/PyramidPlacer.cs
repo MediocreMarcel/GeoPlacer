@@ -1,13 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class QuboidPlacer : Placeable
+public class PyramidPlacer : Placeable
 {
-    public GameObject QuboidPrefab;
+    public GameObject PyramidPrefab;
     public override void GeneratePreview(Vector3 centerPosition, Vector3 scale)
     {
         if (this.previewObject == null)
         {
-            this.previewObject = Instantiate(QuboidPrefab, centerPosition, Quaternion.identity).gameObject;
+            this.previewObject = Instantiate(PyramidPrefab, centerPosition, Quaternion.identity).gameObject;
         }
 
         this.SetPreviewMaterial(this.previewObject.GetComponent<Renderer>().material);

@@ -3087,6 +3087,9 @@ GameObject:
   - component: {fileID: 416060778}
   - component: {fileID: 416060780}
   - component: {fileID: 416060781}
+  - component: {fileID: 416060782}
+  - component: {fileID: 416060783}
+  - component: {fileID: 416060784}
   m_Layer: 0
   m_Name: Placer
   m_TagString: Untagged
@@ -3154,10 +3157,111 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  previewOutlinePrefab: {fileID: 7747588753113584933, guid: 461ff3ec40c088549a00164373574269, type: 3}
   startMarker: {fileID: 1791422365}
   endMarker: {fileID: 709016618}
   startSphere: {fileID: 1565903725}
   endSphere: {fileID: 31836497}
+  QuboidPrefab: {fileID: 7747588753113584933, guid: 5faf796563d6ff8429e4435fa1f1ca0e, type: 3}
+--- !u!114 &416060782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416060774}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9fc1af1770c81f4ca86dcfbdaf0774b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFinishedPlacing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: TurnOffPlacer
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  previewOutlinePrefab: {fileID: 7747588753113584933, guid: 461ff3ec40c088549a00164373574269, type: 3}
+  startMarker: {fileID: 1791422365}
+  endMarker: {fileID: 709016618}
+  startSphere: {fileID: 1565903725}
+  endSphere: {fileID: 31836497}
+  SpherePrefab: {fileID: 3595543996858748131, guid: fe91d7190ccd71e439b3cbc75b7f9072, type: 3}
+--- !u!114 &416060783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416060774}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed65f7cd67905704da38a544ae88824f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFinishedPlacing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: TurnOffPlacer
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  previewOutlinePrefab: {fileID: 7747588753113584933, guid: 461ff3ec40c088549a00164373574269, type: 3}
+  startMarker: {fileID: 1791422365}
+  endMarker: {fileID: 709016618}
+  startSphere: {fileID: 1565903725}
+  endSphere: {fileID: 31836497}
+  CylinderPrefab: {fileID: 8067661944845758390, guid: 9d6d56cdfb3194647953472a07f01792, type: 3}
+--- !u!114 &416060784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416060774}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74bdb434eedc67649b06781c56b10183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFinishedPlacing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2139531615}
+        m_TargetAssemblyTypeName: HandMenuHandler, Assembly-CSharp
+        m_MethodName: TurnOffPlacer
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  previewOutlinePrefab: {fileID: 7747588753113584933, guid: 461ff3ec40c088549a00164373574269, type: 3}
+  startMarker: {fileID: 1791422365}
+  endMarker: {fileID: 709016618}
+  startSphere: {fileID: 1565903725}
+  endSphere: {fileID: 31836497}
+  PyramidPrefab: {fileID: 7384130121676190936, guid: 03f7a9829f990114e91fe41e580a3ab9, type: 3}
 --- !u!1 &421278218
 GameObject:
   m_ObjectHideFlags: 0
@@ -9934,19 +10038,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c020ebf06513a084caa57aa68a245a6b, type: 2}
   OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 416060774}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
+      m_Calls: []
   Events:
   - Event:
       m_PersistentCalls:
@@ -11327,7 +11419,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a0594639d208a8341aad9b2141b167c9, type: 2}
+  - {fileID: 2100000, guid: cd8b99d5e03d91d439b3d3e532d00831, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

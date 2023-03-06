@@ -33,36 +33,62 @@ public class PlaceMenuHandler : MonoBehaviour
     {
         if (toggle)
         {
-        this.placeSphereToggleButtonInteractable.IsToggled = false;
-        this.placePyramidToggleButtonInteractable.IsToggled = false;
-        this.placeCylinderToggleButtonInteractable.IsToggled = false;
+            this.placeSphereToggleButtonInteractable.IsToggled = false;
+            this.placePyramidToggleButtonInteractable.IsToggled = false;
+            this.placeCylinderToggleButtonInteractable.IsToggled = false;
         }
-        this.handMenuHandler.SetCuboidPlacerEnabled(toggle);
+        this.handMenuHandler.SetPlacerEnabled(Placables.QUBOID, toggle);
     }
 
     public void OnSphereToggle(bool toggle)
     {
-        this.placeQuboidToggleButtonInteractable.IsToggled = false;
-        this.placePyramidToggleButtonInteractable.IsToggled = false;
-        this.placeCylinderToggleButtonInteractable.IsToggled = false;
+        if (toggle)
+        {
+            this.placeQuboidToggleButtonInteractable.IsToggled = false;
+            this.placePyramidToggleButtonInteractable.IsToggled = false;
+            this.placeCylinderToggleButtonInteractable.IsToggled = false;
+        }
+        this.handMenuHandler.SetPlacerEnabled(Placables.SPHERE, toggle);
     }
 
     public void OnPyramidToggle(bool toggle)
     {
-        this.placeSphereToggleButtonInteractable.IsToggled = false;
-        this.placeQuboidToggleButtonInteractable.IsToggled = false;
-        this.placeCylinderToggleButtonInteractable.IsToggled = false;
+        if (toggle)
+        {
+            this.placeSphereToggleButtonInteractable.IsToggled = false;
+            this.placeQuboidToggleButtonInteractable.IsToggled = false;
+            this.placeCylinderToggleButtonInteractable.IsToggled = false;
+        }
+        this.handMenuHandler.SetPlacerEnabled(Placables.PYRAMID, toggle);
     }
 
     public void OnCylinderToggle(bool toggle)
     {
-        this.placeSphereToggleButtonInteractable.IsToggled = false;
-        this.placePyramidToggleButtonInteractable.IsToggled = false;
-        this.placeQuboidToggleButtonInteractable.IsToggled = false;
+        if (toggle)
+        {
+            this.placeSphereToggleButtonInteractable.IsToggled = false;
+            this.placePyramidToggleButtonInteractable.IsToggled = false;
+            this.placeQuboidToggleButtonInteractable.IsToggled = false;
+        }
+        this.handMenuHandler.SetPlacerEnabled(Placables.CYLINDER, toggle);
     }
 
     public void SetCuboidToggle(bool isToggled)
     {
         this.placeQuboidToggleButtonInteractable.IsToggled = isToggled;
+    }
+
+    public void SetSphereToggle(bool isToggled)
+    {
+        this.placeSphereToggleButtonInteractable.IsToggled = isToggled;
+    }
+
+    public void SetCylinderToggle(bool isToggled)
+    {
+        this.placeCylinderToggleButtonInteractable.IsToggled = isToggled;
+    }
+    public void SetPyramidToggle(bool isToggled)
+    {
+        this.placePyramidToggleButtonInteractable.IsToggled = isToggled;
     }
 }

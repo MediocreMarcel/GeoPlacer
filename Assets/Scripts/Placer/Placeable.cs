@@ -1,8 +1,6 @@
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,9 +14,12 @@ enum State
 public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 {
     public UnityEvent onFinishedPlacing;
+    public GameObject previewOutlinePrefab;
 
     protected Vector3 startPosition;
     protected GameObject previewObject;
+
+    private GameObject previewOutline;
 
     private const float SPHERE_SIZE = 0.03f;
 
@@ -30,7 +31,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
     [SerializeField] private GameObject startSphere;
     [SerializeField] private GameObject endSphere;
 
-    public abstract void GeneratePreview(MixedRealityPose pose);
+    public abstract void GeneratePreview(Vector3 centerPosition, Vector3 scale);
 
     private void OnEnable()
     {
@@ -62,8 +63,8 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         CoreServices.InputSystem?.UnregisterHandler<IMixedRealityPointerHandler>(this);
 
         this.startPosition = Vector3.zero;
-        Destroy(this.previewObject);
         this.previewObject = null;
+        this.previewOutline = null;
         this.state = State.Idle;
         this.startMarker.SetActive(false);
         this.endMarker.SetActive(false);
@@ -74,11 +75,12 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         this.isPaused = paused;
         this.startMarker.SetActive(!paused);
         this.endMarker.SetActive(!paused);
+        this.previewOutline.SetActive(!paused);
         if (paused)
         {
             Destroy(this.previewObject);
         }
-        
+
     }
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)
@@ -102,7 +104,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         {
             if (state == State.Idle)
             {
-                this.startPosition = eventData.Pointer.Position;
+                this.startPosition = this.startMarker.transform.position;
                 this.state = State.StartPlaced;
             }
             else if (state == State.StartPlaced && this.previewObject != null)
@@ -113,6 +115,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
                 this.endMarker.SetActive(false);
                 this.startPosition = Vector3.zero;
                 this.previewObject = null;
+                this.previewOutline.SetActive(false);
                 this.onFinishedPlacing.Invoke();
             }
         }
@@ -126,12 +129,15 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         {
             if (state == State.Idle)
             {
-                this.updateStartSphere(pose);
+                this.UpdateStartSphere(pose);
             }
             else if (state == State.StartPlaced)
             {
-                this.GeneratePreview(pose);
-                this.updateEndSphere(pose);
+                Vector3 previewCenterPosition = this.CalucaltePrewiewCenterPosition(pose);
+                Vector3 previewScale = this.CalculatePreviewScale(pose);
+                this.GeneratePreview(previewCenterPosition, previewScale);
+                this.DrawPreviewOutline(previewCenterPosition, previewScale);
+                this.UpdateEndSphere(pose);
             }
         }
         else
@@ -141,7 +147,45 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
-    private void updateStartSphere(MixedRealityPose pose)
+    protected void SetPreviewMaterial(Material material)
+    {
+        MaterialUtils.SetupBlendMode(material, MaterialUtils.BlendMode.Transparent);
+        material.color = new Color(0.52f, 0.52f, 0.52f, 0.7f);
+    }
+
+    private void DrawPreviewOutline(Vector3 position, Vector3 scale)
+    {
+        Debug.Log(this.previewOutline);
+        if (this.previewOutline == null)
+        {
+            this.previewOutline = Instantiate(this.previewOutlinePrefab, position, Quaternion.identity).gameObject;
+        }
+        if (!this.previewOutline.activeSelf)
+        {
+            this.previewOutline.SetActive(true);
+        }
+
+        this.previewOutline.transform.position = position;
+        this.previewOutline.transform.localScale = scale;
+
+    }
+
+    private Vector3 CalculatePreviewScale(MixedRealityPose pose)
+    {
+        float scaleX = Mathf.Abs(this.startPosition.x - pose.Position.x);
+        float scaleY = Mathf.Abs(this.startPosition.y - pose.Position.y);
+        float scaleZ = Mathf.Abs(this.startPosition.z - pose.Position.z);
+        return new Vector3(scaleX, scaleY, scaleZ);
+    }
+
+    private Vector3 CalucaltePrewiewCenterPosition(MixedRealityPose pose)
+    {
+        return (this.startPosition + pose.Position) / 2;
+    }
+
+
+
+    private void UpdateStartSphere(MixedRealityPose pose)
     {
         if (this.startSphere == null)
         {
@@ -158,7 +202,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         this.startMarker.transform.localPosition = pose.Position;
     }
 
-    private void updateEndSphere(MixedRealityPose pose)
+    private void UpdateEndSphere(MixedRealityPose pose)
     {
         if (this.endSphere == null)
         {

@@ -8,26 +8,45 @@ public class HandMenuHandler : MonoBehaviour
     [SerializeField] private GameObject Placer;
     [SerializeField] private PlaceMenuHandler PlaceMenuHandler;
     private QuboidPlacer CuboidPlacer;
+    private SpherePlacer SpherePlacer;
+    private CylinderPlacer CylinderPlacer;
+    private PyramidPlacer PyramidPlacer;
     private Placables? ActivePlacer;
 
     void OnEnable()
     {
         this.CuboidPlacer = Placer.GetComponent<QuboidPlacer>();
-
+        this.SpherePlacer = Placer.GetComponent<SpherePlacer>();
+        this.CylinderPlacer = Placer.GetComponent<CylinderPlacer>();
+        this.PyramidPlacer = Placer.GetComponent<PyramidPlacer>();
     }
 
-    public void SetCuboidPlacerEnabled(bool enabled)
+    public void SetPlacerEnabled(Placables placerType, bool enabled) 
     {
-        this.CuboidPlacer.enabled = enabled;
+        switch (placerType)
+        {
+            case Placables.QUBOID:
+                this.CuboidPlacer.enabled = enabled;
+                break;
+            case Placables.PYRAMID:
+                this.PyramidPlacer.enabled = enabled;
+                break;
+            case Placables.SPHERE:
+                this.SpherePlacer.enabled = enabled;
+                break;
+            case Placables.CYLINDER:
+                this.CylinderPlacer.enabled = enabled;
+                break;
+        }
+
         if (enabled)
         {
-            this.ActivePlacer = Placables.QUBOID;
+            this.ActivePlacer = placerType;
         }
         else
         {
             this.ActivePlacer = null;
         }
-
     }
 
     public void SetPausePlacers(bool paused)
@@ -38,10 +57,13 @@ public class HandMenuHandler : MonoBehaviour
                 this.CuboidPlacer.SetPausePlacer(paused);
                 break;
             case Placables.PYRAMID:
+                this.PyramidPlacer.SetPausePlacer(paused);
                 break;
             case Placables.SPHERE:
+                this.SpherePlacer.SetPausePlacer(paused);
                 break;
             case Placables.CYLINDER:
+                this.CylinderPlacer.SetPausePlacer(paused);
                 break;
         }
     }
@@ -59,10 +81,16 @@ public class HandMenuHandler : MonoBehaviour
                     this.CuboidPlacer.enabled = false;
                     break;
                 case Placables.PYRAMID:
+                    this.PlaceMenuHandler.SetPyramidToggle(false);
+                    this.PyramidPlacer.enabled = false;
                     break;
                 case Placables.SPHERE:
+                    this.PlaceMenuHandler.SetSphereToggle(false);
+                    this.SpherePlacer.enabled = false;
                     break;
                 case Placables.CYLINDER:
+                    this.PlaceMenuHandler.SetCylinderToggle(false);
+                    this.CylinderPlacer.enabled = false;
                     break;
             }
         } else
