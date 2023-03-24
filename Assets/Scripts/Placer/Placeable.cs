@@ -31,6 +31,11 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
     [SerializeField] private GameObject startSphere;
     [SerializeField] private GameObject endSphere;
 
+    /// <summary>
+    /// Method generates the figure as a preview.
+    /// </summary>
+    /// <param name="centerPosition">Center position of the figure</param>
+    /// <param name="scale">Scale of the figure</param>
     public abstract void GeneratePreview(Vector3 centerPosition, Vector3 scale);
 
     private void OnEnable()
@@ -61,6 +66,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         }
 
         this.startMarker.SetActive(true);
+        this.endMarker.SetActive(false);
     }
 
     private void OnDisable()
@@ -76,6 +82,10 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         this.endMarker.SetActive(false);
     }
 
+    /// <summary>
+    /// Pauses the placer. Keeps the Start point if its allready been set.
+    /// </summary>
+    /// <param name="paused">Bool true if paused</param>
     public void SetPausePlacer(bool paused)
     {
         this.isPaused = paused;
@@ -88,21 +98,16 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
-    public void OnPointerDown(MixedRealityPointerEventData eventData)
-    {
-        //Debug.Log($"Event: {eventData.ToString()}, Position: {eventData.Pointer.Position}");
-    }
+    public void OnPointerDown(MixedRealityPointerEventData eventData) { }
 
-    public void OnPointerDragged(MixedRealityPointerEventData eventData)
-    {
-        //Debug.Log($"Event: {eventData.ToString()}, Position: {eventData.Pointer.Position}");
-    }
+    public void OnPointerDragged(MixedRealityPointerEventData eventData) { }
 
-    public void OnPointerUp(MixedRealityPointerEventData eventData)
-    {
-        //Debug.Log($"Event: {eventData.ToString()}, Position: {eventData.Pointer.Position}");
-    }
+    public void OnPointerUp(MixedRealityPointerEventData eventData) { }
 
+    /// <summary>
+    /// Called if the pinch gesture is recognized
+    /// </summary>
+    /// <param name="eventData">event data given from MRTK</param>
     public void OnPointerClicked(MixedRealityPointerEventData eventData)
     {
         if (!this.isPaused)
@@ -153,12 +158,21 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         }
     }
 
+    /// <summary>
+    /// Changes a material to the preview material
+    /// </summary>
+    /// <param name="material">Material that should be modified</param>
     protected void SetPreviewMaterial(Material material)
     {
         MaterialUtils.SetupBlendMode(material, MaterialUtils.BlendMode.Transparent);
         material.color = new Color(0.52f, 0.52f, 0.52f, 0.7f);
     }
 
+    /// <summary>
+    /// Draws a Box around the preview object
+    /// </summary>
+    /// <param name="position">Position of the Box</param>
+    /// <param name="scale">Scale of the Box</param>
     private void DrawPreviewOutline(Vector3 position, Vector3 scale)
     {
         if (this.previewOutline == null)
@@ -175,6 +189,11 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 
     }
 
+    /// <summary>
+    /// Calculates the Scale that a figure needs
+    /// </summary>
+    /// <param name="pose">Current position of index finger as MixRealityPose Object</param>
+    /// <returns>Scale that the object needs</returns>
     private Vector3 CalculatePreviewScale(MixedRealityPose pose)
     {
         float scaleX = Mathf.Abs(this.startPosition.x - pose.Position.x);
@@ -183,13 +202,21 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         return new Vector3(scaleX, scaleY, scaleZ);
     }
 
+    /// <summary>
+    /// Calculates the center position of an object, so it can be placed between two given points.
+    /// </summary>
+    /// <param name="pose">Current position of index finger as MixRealityPose Object</param>
+    /// <returns>Center position of object between start point and current finger position</returns>
     private Vector3 CalucaltePrewiewCenterPosition(MixedRealityPose pose)
     {
         return (this.startPosition + pose.Position) / 2;
     }
 
 
-
+    /// <summary>
+    /// Updates the Position of the start sphere to the current position of the finger
+    /// </summary>
+    /// <param name="pose">Current position of index finger as MixRealityPose Object</param>
     private void UpdateStartSphere(MixedRealityPose pose)
     {
         if (this.startSphere == null)
@@ -207,6 +234,10 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
         this.startMarker.transform.localPosition = pose.Position;
     }
 
+    /// <summary>
+    /// Updates the Position of the end sphere to the current position of the finger
+    /// </summary>
+    /// <param name="pose">Current position of index finger as MixRealityPose Object</param>
     private void UpdateEndSphere(MixedRealityPose pose)
     {
         if (this.endSphere == null)

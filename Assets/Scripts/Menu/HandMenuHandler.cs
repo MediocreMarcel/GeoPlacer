@@ -1,102 +1,114 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum Menus
+{
+    Main = 0,
+    Place = 1,
+    Edit = 2,
+    Color = 3
+}
 
 public class HandMenuHandler : MonoBehaviour
 {
 
-    [SerializeField] private GameObject Placer;
-    [SerializeField] private PlaceMenuHandler PlaceMenuHandler;
-    private QuboidPlacer CuboidPlacer;
-    private SpherePlacer SpherePlacer;
-    private CylinderPlacer CylinderPlacer;
-    private PyramidPlacer PyramidPlacer;
-    private Placables? ActivePlacer;
+    [SerializeField] private GameObject MainMenu;
+    private MainMenuHandler MainMenuHandler;
+    [SerializeField] private GameObject PlaceMenu;
+    private PlaceMenuHandler PlaceMenuHandler;
+    [SerializeField] private GameObject EditMenu;
+    private EditMenuHandler EditMenuHandler;
+    [SerializeField] private GameObject ColorMenu;
+    private ColorMenuHandler ColorMenuHandler;
 
-    void OnEnable()
+    private Menus CurrentMenu = Menus.Main;
+
+    private void Start()
     {
-        this.CuboidPlacer = Placer.GetComponent<QuboidPlacer>();
-        this.SpherePlacer = Placer.GetComponent<SpherePlacer>();
-        this.CylinderPlacer = Placer.GetComponent<CylinderPlacer>();
-        this.PyramidPlacer = Placer.GetComponent<PyramidPlacer>();
+        //Get All Menu Handlers
+        this.MainMenuHandler = MainMenu.GetComponent<MainMenuHandler>();
+        this.PlaceMenuHandler = PlaceMenu.GetComponent<PlaceMenuHandler>();
+        this.EditMenuHandler = EditMenu.GetComponent<EditMenuHandler>();
+        this.ColorMenuHandler = ColorMenu.GetComponent<ColorMenuHandler>();
     }
 
-    public void SetPlacerEnabled(Placables placerType, bool enabled) 
+    /// <summary>
+    /// Opens a specific Menu and closes other menus
+    /// </summary>
+    /// <param name="MenuIntRepresented">Int representation of the Menus Enum</param>
+    public void OpenMenu(int MenuIntRepresented)
     {
-        switch (placerType)
+        Menus Menu = (Menus)MenuIntRepresented;
+        this.CurrentMenu = Menu;
+        switch (Menu)
         {
-            case Placables.QUBOID:
-                this.CuboidPlacer.enabled = enabled;
+            case Menus.Main:
+                this.MainMenu.SetActive(true);
+                this.PlaceMenuHandler.CloseMenu();
+                this.EditMenuHandler.CloseMenu();
+                this.ColorMenuHandler.CloseMenu();
                 break;
-            case Placables.PYRAMID:
-                this.PyramidPlacer.enabled = enabled;
+            case Menus.Place:
+                this.PlaceMenu.SetActive(true);
+                this.MainMenuHandler.CloseMenu();
+                this.EditMenuHandler.CloseMenu();
+                this.ColorMenuHandler.CloseMenu();
                 break;
-            case Placables.SPHERE:
-                this.SpherePlacer.enabled = enabled;
+            case Menus.Edit:
+                this.EditMenu.SetActive(true);
+                this.MainMenuHandler.CloseMenu();
+                this.PlaceMenuHandler.CloseMenu();
+                this.ColorMenuHandler.CloseMenu();
                 break;
-            case Placables.CYLINDER:
-                this.CylinderPlacer.enabled = enabled;
-                break;
-        }
-
-        if (enabled)
-        {
-            this.ActivePlacer = placerType;
-        }
-        else
-        {
-            this.ActivePlacer = null;
-        }
-    }
-
-    public void SetPausePlacers(bool paused)
-    {
-        switch (this.ActivePlacer)
-        {
-            case Placables.QUBOID:
-                this.CuboidPlacer.SetPausePlacer(paused);
-                break;
-            case Placables.PYRAMID:
-                this.PyramidPlacer.SetPausePlacer(paused);
-                break;
-            case Placables.SPHERE:
-                this.SpherePlacer.SetPausePlacer(paused);
-                break;
-            case Placables.CYLINDER:
-                this.CylinderPlacer.SetPausePlacer(paused);
+            case Menus.Color:
+                this.ColorMenu.SetActive(true);
+                this.MainMenuHandler.CloseMenu();
+                this.PlaceMenuHandler.CloseMenu();
+                this.EditMenuHandler.CloseMenu();
                 break;
         }
     }
 
-    public void TurnOffPlacer(int figureTypeIntRepresented)
+    /// <summary>
+    /// Closes all menus
+    /// </summary>
+    public void CloseAllMenus()
     {
-        Placables figureType = (Placables)figureTypeIntRepresented;
-        if (this.ActivePlacer == figureType)
-        {
-            this.ActivePlacer = null;
-            switch (figureType)
-            {
-                case Placables.QUBOID:
-                    this.PlaceMenuHandler.SetCuboidToggle(false);
-                    this.CuboidPlacer.enabled = false;
-                    break;
-                case Placables.PYRAMID:
-                    this.PlaceMenuHandler.SetPyramidToggle(false);
-                    this.PyramidPlacer.enabled = false;
-                    break;
-                case Placables.SPHERE:
-                    this.PlaceMenuHandler.SetSphereToggle(false);
-                    this.SpherePlacer.enabled = false;
-                    break;
-                case Placables.CYLINDER:
-                    this.PlaceMenuHandler.SetCylinderToggle(false);
-                    this.CylinderPlacer.enabled = false;
-                    break;
-            }
-        } else
-        {
-            Debug.LogError("Illegal state. Tried to turn off placer that is currently not selected");
-        }
+        this.MainMenuHandler.CloseMenu();
+        this.PlaceMenuHandler.CloseMenu();
+        this.EditMenuHandler.CloseMenu();
+        this.ColorMenuHandler.CloseMenu();
+    }
 
+    /// <summary>
+    /// Hides all Menus, keeps all toggle selections
+    /// </summary>
+    public void HideAllMenus()
+    {
+        this.MainMenu.SetActive(false);
+        this.PlaceMenu.SetActive(false);
+        this.EditMenu.SetActive(false);
+        this.ColorMenu.SetActive(false);
+    }
+
+    /// <summary>
+    /// Opens a the last opened menu
+    /// </summary>
+    public void OpenCurrentMenu()
+    {
+        switch (this.CurrentMenu)
+        {
+            case Menus.Main:
+                this.MainMenu.SetActive(true);
+                break;
+            case Menus.Place:
+                this.PlaceMenu.SetActive(true);
+                break;
+            case Menus.Edit:
+                this.EditMenu.SetActive(true);
+                break;
+            case Menus.Color:
+                this.ColorMenu.SetActive(true);
+                break;
+        }
     }
 }
