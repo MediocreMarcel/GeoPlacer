@@ -1,6 +1,7 @@
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
+using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,11 +26,13 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 
     private State state = State.Idle;
     private bool isPaused = false;
+    private Handedness handedness = Handedness.Right;
 
     [SerializeField] private GameObject startMarker;
     [SerializeField] private GameObject endMarker;
     [SerializeField] private GameObject startSphere;
     [SerializeField] private GameObject endSphere;
+    [SerializeField] private SolverHandler handmenuSolverHandler;
 
     /// <summary>
     /// Method generates the figure as a preview.
@@ -40,6 +43,9 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
 
     private void OnEnable()
     {
+        //Determin handedness by inverting handedness of handmenu
+        this.handedness = handmenuSolverHandler.CurrentTrackedHandedness == Handedness.Right ? Handedness.Left : Handedness.Right;
+
         // Instruct Input System that we would like to receive all input events of type IMixedRealityGestureHandler
         CoreServices.InputSystem?.RegisterHandler<IMixedRealityPointerHandler>(this);
 
@@ -135,7 +141,7 @@ public abstract class Placeable : MonoBehaviour, IMixedRealityPointerHandler
     void Update()
     {
         MixedRealityPose pose;
-        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, Handedness.Both, out pose) && !this.isPaused)
+        if (HandJointUtils.TryGetJointPose(TrackedHandJoint.IndexTip, this.handedness, out pose) && !this.isPaused)
         {
             if (state == State.Idle)
             {
