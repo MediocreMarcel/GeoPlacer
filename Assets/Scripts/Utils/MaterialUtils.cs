@@ -1,3 +1,4 @@
+// SOURCE: https://stackoverflow.com/questions/72309866/how-to-change-material-rendering-mode-to-fade-by-script
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
